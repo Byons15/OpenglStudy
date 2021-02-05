@@ -10,16 +10,17 @@
 
 void FrameBufferSizeCallback(GLFWwindow *window, int w, int h);
 void InputProcess(GLFWwindow *window);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
-float factor = 0.2f;
+float factor = 1.0f;
 
 constexpr unsigned SCR_WIDTH = 1280;
 constexpr unsigned SCR_HEIGHT = 720;
 
 float deltaTime = 0;
 float lastFrame = 0;
-glm::vec3 cameraPos = { 0, 0, 4 };
-glm::vec3 cameraFront = { 0, 0, -1 };
+glm::vec3 cameraPos = { 0, 0, 5 };
+glm::vec3 cameraFront = { 0, 0, 0 };
 glm::vec3 cameraUp = { 0, 1, 0 };
 
 int main(int argc, char *argv[])
@@ -38,6 +39,9 @@ int main(int argc, char *argv[])
 		glfwTerminate();
 		return -1;
 	}
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window, mouse_callback);
 
 	glfwMakeContextCurrent(window); // 将窗口的上下文环境设置为主线程的上下文环境。
 
@@ -218,10 +222,11 @@ int main(int argc, char *argv[])
 		glBindTexture(GL_TEXTURE_2D, texture1);
 
 		shader.Use();
-		shader.SetFloat("factor", 1.0f);
+		shader.SetFloat("factor", factor);
 
 		// 观察变换矩阵
 		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		//glm::mat4 view = glm::lookAt(cameraPos, cameraFront, cameraUp);
 
 		// 投影变换矩阵
 		glm::mat4 projection;
@@ -236,7 +241,7 @@ int main(int argc, char *argv[])
 		{
 			glm::mat4 model;
 			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * glfwGetTime() * (i + 1);
+			float angle = 20.0f * glfwGetTime() * (i);
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			shader.SetMat4("model", glm::value_ptr(model));
 			glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -290,4 +295,42 @@ void InputProcess(GLFWwindow * window)
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+}
+
+
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	static float lastX, lastY;
+	static float yaw = 0.0f, pitch = 0.0f;
+
+	static bool firstMouse = true;
+	if (firstMouse) {  //设置初始位置，防止突然跳到某个方向上
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = lastX - xpos;   //别忘了，在窗口中，左边的坐标小于右边的坐标，而我们需要一个正的角度
+	float yoffset = lastY - ypos;   //同样，在窗口中，下面的坐标大于上面的坐标，而我们往上抬头的时候需要一个正的角度
+	lastX = xpos;
+	lastY = ypos;
+
+	float sensitivity = 0.05f;  //旋转精度
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f)  //往上看不能超过90度
+		pitch = 89.0f;
+	if (pitch < -89.0f)  //往下看也不能超过90度
+		pitch = -89.0f;
+
+	glm::vec3 front;
+	front.x = -sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.y = sin(glm::radians(pitch));
+	front.z = -cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+	cameraFront = glm::normalize(front);
 }
