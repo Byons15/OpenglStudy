@@ -151,6 +151,11 @@
     <ClInclude Include="..\SDK\Shader.h" />
     <ClInclude Include="Camera.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="LampShader.frag" />
+    <None Include="LightShader.frag" />
+    <None Include="Light01.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

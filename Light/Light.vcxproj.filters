@@ -33,4 +33,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Light01.vert" />
+    <None Include="LightShader.frag" />
+    <None Include="LampShader.frag" />
+  </ItemGroup>
 </Project>

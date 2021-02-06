@@ -33,6 +33,16 @@ public:
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
 	}
 
+	void SetVec3(const std::string& name, float x, float y, float z)
+	{
+		glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+	}
+
+	void SetVec3(const std::string& name, GLfloat value[])
+	{
+		glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, value);
+	}
+
 private:
 	unsigned int ID;
 };
