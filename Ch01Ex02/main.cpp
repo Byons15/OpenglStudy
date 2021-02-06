@@ -19,8 +19,8 @@ constexpr unsigned SCR_HEIGHT = 720;
 
 float deltaTime = 0;
 float lastFrame = 0;
-glm::vec3 cameraPos = { 0, 0, 5 };
-glm::vec3 cameraFront = { 0, 0, 0 };
+glm::vec3 cameraPos = { 0, 0, 4 };
+glm::vec3 cameraFront = { 0, 0, -1 };
 glm::vec3 cameraUp = { 0, 1, 0 };
 
 int main(int argc, char *argv[])
@@ -226,7 +226,6 @@ int main(int argc, char *argv[])
 
 		// 观察变换矩阵
 		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-		//glm::mat4 view = glm::lookAt(cameraPos, cameraFront, cameraUp);
 
 		// 投影变换矩阵
 		glm::mat4 projection;
@@ -291,10 +290,17 @@ void InputProcess(GLFWwindow * window)
 		cameraPos -= cameraSpeed * cameraFront;
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		// 叉乘Front和UP得到一个Right方向的向量并归一化，然后再乘上移动分量
 		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraUp;
+
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraUp;
 }
 
 
