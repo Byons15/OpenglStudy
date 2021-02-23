@@ -132,47 +132,47 @@ int main(int argc, char* argv[])
 	glfwSwapInterval(1);
 
 	float vertices[] = {
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
 
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 
-		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
 
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+	0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+	0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+	0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+	0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+	0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+	0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+	-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
 
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+	0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+	0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+	0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+	-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 	};
 
 	glm::vec3 cubePositions[] = {
@@ -191,16 +191,32 @@ int main(int argc, char* argv[])
 	Shader lightShader("Light01.vert", "LightShader.frag");
 	Shader lampShader("Light01.vert", "LampShader.frag");
 
-	unsigned VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	unsigned VBO;
+	// VBO，物体VAO
+	unsigned int VBO, cubeVAO;
+	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// 顶点格式
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glBindVertexArray(cubeVAO);
+
+	// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// 法向量属性
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+
+	// 光源VAO (VBO相同，因为顶点数据是同一组)
+	unsigned int lightVAO;
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// 位置属性（只需要更新跨度就可以了）
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	mat4 lightCubeModel;
@@ -211,13 +227,12 @@ int main(int argc, char* argv[])
 	lampCubeModel = translate(lampCubeModel, vec3(1.2f, 1.0f, 2.0f));
 	lampCubeModel = glm::scale(lampCubeModel, glm::vec3(0.2f));
 
-	
-
 	glEnable(GL_DEPTH_TEST);
 
 	deltaTime = glfwGetTime();
 	lastFrame = deltaTime;
 
+	camera.Position = glm::vec3(0.0f, 0.0f, 4.0f);
 	// 渲染循环
 	while (!glfwWindowShouldClose(window))
 	{
@@ -231,9 +246,11 @@ int main(int argc, char* argv[])
 		mat4 projection = perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		lightShader.Use();
-		glBindVertexArray(VAO);
-		lightShader.SetVec3("objectColor", 0.4, 0.1, 0.1);
+		glBindVertexArray(cubeVAO);
+		lightShader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		lightShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		lightShader.SetFloat("ambientStrenght", 0.1f);
+		lightShader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
 		lightShader.SetMat4("model", glm::value_ptr(lightCubeModel));
 		lightShader.SetMat4("view", glm::value_ptr(view));
 		lightShader.SetMat4("projection", glm::value_ptr(projection));
@@ -241,7 +258,7 @@ int main(int argc, char* argv[])
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		lampShader.Use();
-		glBindVertexArray(VAO);
+		glBindVertexArray(lightVAO);
 		lampShader.SetMat4("model", glm::value_ptr(lampCubeModel));
 		lampShader.SetMat4("view", glm::value_ptr(view));
 		lampShader.SetMat4("projection", glm::value_ptr(projection));
