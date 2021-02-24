@@ -254,6 +254,7 @@ int main(int argc, char* argv[])
 		lightShader.SetMat4("model", glm::value_ptr(lightCubeModel));
 		lightShader.SetMat4("view", glm::value_ptr(view));
 		lightShader.SetMat4("projection", glm::value_ptr(projection));
+		lightShader.SetVec3("viewPos", glm::value_ptr(camera.Position));
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
