@@ -70,6 +70,40 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	camera.ProcessMouseScroll(yoffset);
 }
 
+unsigned int loadTexture(char const* path) {
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+
+	int width, height, nrComponents;
+	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+	if (data) {
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else {
+		std::cout << "纹理加载失败，路径是:" << path << std::endl;
+		stbi_image_free(data);
+	}
+
+	return textureID;
+}
+
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	static float lastX, lastY;
@@ -142,47 +176,48 @@ int main(int argc, char* argv[])
 	glfwSwapInterval(1);
 
 	float vertices[] = {
-	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-	0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-	0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-	0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-	-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		// 位置                  // 法线                 // 纹理坐标
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-	0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-	-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
-	-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-	0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-	0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-	0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-	0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
-	0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
-	-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-	0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-	-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
 	Shader lightShader("Light01.vert", "LightShader02.frag");
@@ -199,11 +234,14 @@ int main(int argc, char* argv[])
 	glBindVertexArray(cubeVAO);
 
 	// 位置属性
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// 法向量属性
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 
 	// 光源VAO (VBO相同，因为顶点数据是同一组)
@@ -213,7 +251,7 @@ int main(int argc, char* argv[])
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// 位置属性（只需要更新跨度就可以了）
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	mat4 lightCubeModel;
@@ -223,6 +261,9 @@ int main(int argc, char* argv[])
 	mat4 lampCubeModel;
 	lampCubeModel = translate(lampCubeModel, vec3(1.2f, 1.0f, 2.0f));
 	lampCubeModel = glm::scale(lampCubeModel, glm::vec3(0.2f));
+
+	auto diffuseTex = loadTexture("diffuse_img.png");
+	auto specularTex = loadTexture("specular.png");
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -251,13 +292,18 @@ int main(int argc, char* argv[])
 		lightShader.SetMat4("view", glm::value_ptr(view));
 		lightShader.SetMat4("projection", glm::value_ptr(projection));
 		lightShader.SetVec3("viewPos", glm::value_ptr(camera.Position));
-		lightShader.SetVec3("material.ambient", 0.0215f, 0.1745f, 0.0215f);
-		lightShader.SetVec3("material.diffuse", 0.07568f, 0.61424f, 0.07568f);
-		lightShader.SetVec3("material.specular", 0.633f, 0.727811f, 0.633f);
-		lightShader.SetFloat("material.shininess", 128 * 0.6f);
+		lightShader.SetInt("material.diffuse", 0);
+		lightShader.SetInt("material.specular", 1);
+		lightShader.SetFloat("material.shininess", 32.0f);
 		lightShader.SetVec3("light.ambient", 1.0f, 1.0f, 1.0f);
 		lightShader.SetVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
 		lightShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseTex);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularTex);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
