@@ -53,6 +53,16 @@ void InputProcess(GLFWwindow* window)
 	{
 		camera.ProcessKeyboard(BACKWARD, deltaTime);
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		camera.ProcessKeyboard(UP, deltaTime);
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	{
+		camera.ProcessKeyboard(DOWN, deltaTime);
+	}
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) 
@@ -175,20 +185,7 @@ int main(int argc, char* argv[])
 	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 	};
 
-	glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
-
-	Shader lightShader("Light01.vert", "LightShader.frag");
+	Shader lightShader("Light01.vert", "LightShader02.frag");
 	Shader lampShader("Light01.vert", "LampShader.frag");
 
 	// VBO£¨ŒÔÃÂVAO
@@ -221,7 +218,7 @@ int main(int argc, char* argv[])
 
 	mat4 lightCubeModel;
 	lightCubeModel = translate(lightCubeModel, vec3(0, 0, 0));
-	lightCubeModel = glm::rotate(lightCubeModel, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+	lightCubeModel = glm::rotate(lightCubeModel, glm::radians(10.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
 	mat4 lampCubeModel;
 	lampCubeModel = translate(lampCubeModel, vec3(1.2f, 1.0f, 2.0f));
@@ -249,12 +246,18 @@ int main(int argc, char* argv[])
 		glBindVertexArray(cubeVAO);
 		lightShader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		lightShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		lightShader.SetFloat("ambientStrenght", 0.1f);
 		lightShader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
 		lightShader.SetMat4("model", glm::value_ptr(lightCubeModel));
 		lightShader.SetMat4("view", glm::value_ptr(view));
 		lightShader.SetMat4("projection", glm::value_ptr(projection));
 		lightShader.SetVec3("viewPos", glm::value_ptr(camera.Position));
+		lightShader.SetVec3("material.ambient", 0.0215f, 0.1745f, 0.0215f);
+		lightShader.SetVec3("material.diffuse", 0.07568f, 0.61424f, 0.07568f);
+		lightShader.SetVec3("material.specular", 0.633f, 0.727811f, 0.633f);
+		lightShader.SetFloat("material.shininess", 128 * 0.6f);
+		lightShader.SetVec3("light.ambient", 1.0f, 1.0f, 1.0f);
+		lightShader.SetVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
+		lightShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 

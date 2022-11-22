@@ -11,7 +11,9 @@ enum Camera_Movement {
 	FORWARD,
 	BACKWARD,
 	LEFT,
-	RIGHT
+	RIGHT,
+	UP,
+	DOWN
 };
 
 const float YAW = 0.0f;
@@ -64,13 +66,17 @@ public:
 	void ProcessKeyboard(Camera_Movement direction, float deltaTime) {
 		float velocity = MovementSpeed * deltaTime;
 		if (direction == FORWARD)
-			Position += Front * velocity;
+			Position += glm::vec3(Front.x, 0.0f, Front.z) * velocity;
 		if (direction == BACKWARD)
-			Position -= Front * velocity;
+			Position -= glm::vec3(Front.x, 0.0f, Front.z) * velocity;
 		if (direction == LEFT)
-			Position -= Right * velocity;
+			Position -= glm::vec3(Right.x, 0.0f, Right.z) * velocity;
 		if (direction == RIGHT)
-			Position += Right * velocity;
+			Position += glm::vec3(Right.x, 0.0f, Right.z) * velocity;
+		if (direction == UP)
+			Position += glm::vec3(0.0f, Up.y, 0.0f) * velocity;
+		if (direction == DOWN)
+			Position -= glm::vec3(0.0f, Up.y, 0.0f) * velocity;
 	}
 
 	//鼠标输入处理
