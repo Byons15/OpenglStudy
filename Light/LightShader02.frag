@@ -7,13 +7,6 @@ struct Material
 	float shininess;
 };
 
-struct Light
-{
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
-};
-
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 texcoord;
@@ -21,16 +14,14 @@ in vec2 texcoord;
 out vec4 FragColor;
 
 uniform Material material;
-uniform Light light;
 uniform vec3 viewPos;
 uniform vec3 lightPos;
-uniform vec3 objectColor;
 uniform vec3 lightColor;
 
 void main()
 {
 	// 环境光
-	vec3 ambient = lightColor * vec3(texture(material.diffuse, texcoord));
+	vec3 ambient = lightColor * vec3(texture(material.diffuse, texcoord)) * 0.1;
 
 	// 漫射光
 	vec3 norm = normalize(Normal);

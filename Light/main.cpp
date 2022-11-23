@@ -220,7 +220,7 @@ int main(int argc, char* argv[])
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
-	Shader lightShader("Light01.vert", "LightShader02.frag");
+	Shader cubeShader("Light01.vert", "LightShader02.frag");
 	Shader lampShader("Light01.vert", "LampShader.frag");
 
 	// VBO£¨ŒÔÃÂVAO
@@ -254,9 +254,9 @@ int main(int argc, char* argv[])
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	mat4 lightCubeModel;
-	lightCubeModel = translate(lightCubeModel, vec3(0, 0, 0));
-	lightCubeModel = glm::rotate(lightCubeModel, glm::radians(10.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+	mat4 cubeModel;
+	cubeModel = translate(cubeModel, vec3(0, 0, 0));
+	cubeModel = glm::rotate(cubeModel, glm::radians(10.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
 	mat4 lampCubeModel;
 	lampCubeModel = translate(lampCubeModel, vec3(1.2f, 1.0f, 2.0f));
@@ -269,6 +269,19 @@ int main(int argc, char* argv[])
 
 	deltaTime = glfwGetTime();
 	lastFrame = deltaTime;
+
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
 
 	camera.Position = glm::vec3(0.0f, 0.0f, 4.0f);
 	// ‰÷»æ—≠ª∑
@@ -283,21 +296,26 @@ int main(int argc, char* argv[])
 		mat4 view = camera.GetViewMatrix();
 		mat4 projection = perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-		lightShader.Use();
+		cubeShader.Use();
 		glBindVertexArray(cubeVAO);
-		lightShader.SetVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		lightShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		lightShader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
-		lightShader.SetMat4("model", glm::value_ptr(lightCubeModel));
-		lightShader.SetMat4("view", glm::value_ptr(view));
-		lightShader.SetMat4("projection", glm::value_ptr(projection));
-		lightShader.SetVec3("viewPos", glm::value_ptr(camera.Position));
-		lightShader.SetInt("material.diffuse", 0);
-		lightShader.SetInt("material.specular", 1);
-		lightShader.SetFloat("material.shininess", 32.0f);
-		lightShader.SetVec3("light.ambient", 1.0f, 1.0f, 1.0f);
-		lightShader.SetVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
-		lightShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		cubeShader.SetVec3("lightPos", 1.2f, 1.0f, 2.0f);
+		cubeShader.SetMat4("view", glm::value_ptr(view));
+		cubeShader.SetMat4("projection", glm::value_ptr(projection));
+		cubeShader.SetVec3("viewPos", glm::value_ptr(camera.Position));
+		cubeShader.SetInt("material.diffuse", 0);
+		cubeShader.SetInt("material.specular", 1);
+		cubeShader.SetFloat("material.shininess", 32.0f);
+
+		for (int i = 0; i < 10; ++i)
+		{
+			glm::mat4 model;
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * glfwGetTime() * (i);
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			cubeShader.SetMat4("model", glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseTex);
