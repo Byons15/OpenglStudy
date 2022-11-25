@@ -302,12 +302,15 @@ int main(int argc, char* argv[])
 		cubeShader.SetVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		cubeShader.SetVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		cubeShader.SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
 		cubeShader.SetMat4("view", glm::value_ptr(view));
 		cubeShader.SetMat4("projection", glm::value_ptr(projection));
 		cubeShader.SetVec3("viewPos", glm::value_ptr(camera.Position));
+
 		cubeShader.SetInt("material.diffuse", 0);
 		cubeShader.SetInt("material.specular", 1);
 		cubeShader.SetFloat("material.shininess", 32.0f);
+
 		cubeShader.SetVec3("pointLight.position", 1.2f, 1.0f, 2.0f);
 		cubeShader.SetVec3("pointLight.ambient", 0.2f, 0.2f, 0.2f);
 		cubeShader.SetVec3("pointLight.diffuse", 0.5f, 0.5f, 0.5f);
@@ -315,6 +318,14 @@ int main(int argc, char* argv[])
 		cubeShader.SetFloat("pointLight.constant", 1.0f);
 		cubeShader.SetFloat("pointLight.linear", 0.09f);
 		cubeShader.SetFloat("pointLight.quadratic", 0.032f);
+
+		cubeShader.SetVec3("spotLight.position", glm::value_ptr(camera.Position));
+		cubeShader.SetVec3("spotLight.direction", glm::value_ptr(camera.Front));
+		cubeShader.SetFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		cubeShader.SetVec3("spotLight.ambinet", 0, 0, 0);
+		cubeShader.SetVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		cubeShader.SetVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		cubeShader.SetFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 		for (int i = 0; i < 10; ++i)
 		{
